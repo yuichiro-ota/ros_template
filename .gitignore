@@ -1,0 +1,9 @@
+.env
+.codex
+build/
+install/
+log/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

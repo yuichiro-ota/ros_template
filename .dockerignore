@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.env.*
+.codex
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+build
+install
+log
+.DS_Store
