@@ -215,6 +215,40 @@ talker 側の出力例:
 [INFO] [...] [talker]: Publishing: 'Hello World: 2'
 ```
 
+### turtlesim の動作確認
+
+X11 転送が有効な状態で turtlesim を起動できます。
+
+1つ目のターミナルで turtlesim のウィンドウを起動します。
+
+```bash
+docker compose exec ros_humble bash
+ros2 run turtlesim turtlesim_node
+```
+
+非 Linux 環境では次を使ってください。
+
+```bash
+docker compose -f docker-compose.nonlinux.yml exec ros_humble bash
+ros2 run turtlesim turtlesim_node
+```
+
+2つ目のターミナルでキーボード操作ノードを起動します。
+
+```bash
+docker compose exec ros_humble bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+非 Linux 環境では次を使ってください。
+
+```bash
+docker compose -f docker-compose.nonlinux.yml exec ros_humble bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+`turtle_teleop_key` を起動したターミナルにフォーカスを当てた状態で矢印キーを押すと、ウィンドウ内の亀が動きます。
+
 ## 補足
 
 - `entrypoint.sh` は `bash /app/entrypoint.sh` として実行するため、ホスト側の実行権限に依存しません。

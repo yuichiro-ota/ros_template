@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ros:humble-ros-base
 
 # ============================================================
 # 基本設定
@@ -7,47 +7,29 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# ロケール・基本ツール
+# ロケール・基本ツール（ROS/Ubuntu 22.04 セットアップ済みのため最小限）
 RUN apt-get update && apt-get install -y \
-    locales \
     curl \
-    gnupg2 \
-    lsb-release \
     build-essential \
     git \
-    && locale-gen en_US en_US.UTF-8 \
-    && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/*
-
-# ============================================================
-# ROS 2 Humble
-# ============================================================
-# リポジトリ登録（apt-key 非推奨のため signed-by 方式を使用）
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
-        -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
-        http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" \
-        > /etc/apt/sources.list.d/ros2.list
-
-# コアパッケージ（ros-humble-desktop に rclpy 等を含む）
-RUN apt-get update && apt-get install -y \
-    ros-humble-desktop \
     python3-colcon-common-extensions \
-    python3-rosdep \
     python3-argcomplete \
     && rm -rf /var/lib/apt/lists/*
 
-# rosdep 初期化
-RUN rosdep init || true && rosdep update
+# rosdep 更新（init は osrf イメージ内で済み）
+RUN rosdep update
 
 # ============================================================
 # [オプション] 追加 ROS パッケージ
 # プロジェクトに応じてコメントを解除してください
 # ============================================================
-# DDS ミドルウェア（デフォルト fastDDS の代替）・ロボット記述言語
+# DDS ミドルウェア（デフォルト fastDDS の代替）・ロボット記述言語・デモ
 RUN apt-get update && apt-get install -y \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-xacro \
+    ros-humble-demo-nodes-cpp \
+    ros-humble-demo-nodes-py \
+    ros-humble-turtlesim \
     && rm -rf /var/lib/apt/lists/*
 
 # カメラ
